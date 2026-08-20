@@ -1,0 +1,34 @@
+# Board config template for qli-bt-dts
+# Copy to configs/<board>.yaml and fill in values.
+# Once filled, Claude will use this file instead of asking the user.
+
+board:
+  name: ""                    # e.g. iq-x7181-evk
+  machine: ""                 # e.g. iq-x7181-evk (kas MACHINE value)
+  kas_yml: ""                 # e.g. meta-qcom/ci/iq-x7181-evk.yml
+  soc: ""                     # e.g. x1e80100 (Hamoa)
+
+build:
+  server: ""                  # e.g. <build-server>
+  workspace: ""               # e.g. /local/mnt/workspace/<user>/qclinux/QLI0.0/IQ-X7181-EVK
+  qli_version: ""             # QLI 0.0 or QLI 2.0
+  kernel_recipe: ""           # e.g. linux-qcom-next (0.0) or linux-qcom-6.18 (2.0)
+
+flash:
+  windows_drive: ""           # e.g. X:
+  linux_prefix: ""            # e.g. /local/mnt/workspace/<user>/
+  windows_prefix: ""          # e.g. X:\  (derived from above two fields)
+  alpaca_port: ""             # e.g. VTP21 (optional — leave empty for auto-detect)
+  pcat_sn: ""                 # e.g. 5DEE301B (filled after first PCAT -devices)
+
+bt:
+  chip: ""                    # e.g. wcn7850, qca2066
+  pattern: ""                 # B1, B2, or C
+  binding_yaml: ""            # path in kernel-source, e.g. Documentation/devicetree/bindings/net/bluetooth/qcom,wcn7850-bt.yaml
+  sysio_xlsx: ""              # path to SYSIO IO-assignment Excel (preferred source for the pins below)
+  uart_instance: ""           # e.g. uart14 — QUP instance from SYSIO (schematic fallback)
+  uart_pins: ""               # e.g. 33,34,35,36 (CTS,RFR,TX,RX) from SYSIO
+  bt_en_gpio: ""              # e.g. tlmm 116 GPIO_ACTIVE_HIGH (GPIO number from SYSIO BT_EN row)
+  bt_en_hardware_pullup: ""   # yes or no — SYSIO Default Pull: PU=yes, PD=no. Determines if enable-gpios is required
+  clock_source: ""            # e.g. <&rpmhcc RPMH_CXO_CLK> — NOT in SYSIO; from PMIC/reference board
+  reference_board: ""         # e.g. hamoa-iot-evk (leave empty if none)
