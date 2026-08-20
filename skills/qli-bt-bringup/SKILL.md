@@ -35,7 +35,14 @@ back-to-back (not deferred to later stages):
 | Question | Suggested options (add "Other") | Why needed |
 |---|---|---|
 | **Build server** | server2 · server3 · server4 · Other (hostname/IP) | SSH access for Stage 1–4 |
-| **SYSIO Excel or schematic path** | provide SYSIO `.xlsx` path (preferred) · schematic PDF path · neither yet | Needed at Stage 4 (DTS); collect now to avoid asking again later |
+
+Then, as a **separate free-text prompt (not multiple-choice)** — this is a
+file path, not a preference between choices:
+> "Path to the SYSIO Excel for this board (preferred), or the schematic PDF
+> if no SYSIO sheet exists yet?"
+
+Accept whatever is pasted verbatim and save it to `configs/<board>.yaml`.
+Only fall back to asking again if neither is available yet.
 
 Everything else (UART instance, GPIO, clock, Windows drive letter, PCAT SN)
 is resolved automatically from (shared board data at the repo top level):

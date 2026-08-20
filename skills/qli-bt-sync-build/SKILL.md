@@ -18,11 +18,21 @@ This is Step 1 of the BT bringup flow. Complete this before moving to
 **First check whether this platform uses standard meta-qcom.** If the board
 is not standard meta-qcom (e.g. it uses `meta-qcom-3rdparty` or any other
 repo), do not assume repo naming, branch names, or kas yml paths mirror
-meta-qcom — **ask the user for the complete sync command(s) and the complete
-build command(s)**, and save them verbatim to `configs/<board>.yaml` under
-`build.sync_cmd` / `build.build_cmd`. Then skip straight to running those
-commands (Step 1 and Step 5 below don't apply — go to Step 2/3/3b/4/6 only
-insofar as they're still relevant, e.g. tmux wrapping and output verification).
+meta-qcom.
+
+**Ask for the sync and build commands as free-text/paste input, not a
+multiple-choice question.** The user has an exact command they need to run
+(e.g. `git clone git@github.com:...` over SSH, or any other form) — there is
+no meaningful "option" to choose between (do not invent choices like
+SSH vs HTTPS transport). Ask once, e.g. "Please paste the full sync command
+and the full build command for this platform", accept whatever they paste
+verbatim, and save it to `configs/<board>.yaml` under `build.sync_cmd` /
+`build.build_cmd`. **Never ask again once these are set** — check the config
+first, every time, before asking.
+
+Then skip straight to running those commands (Step 1 and Step 5 below don't
+apply — go to Step 2/3/3b/4/6 only insofar as they're still relevant, e.g.
+tmux wrapping and output verification).
 
 For **standard meta-qcom**, ask the user (or read from context):
 
