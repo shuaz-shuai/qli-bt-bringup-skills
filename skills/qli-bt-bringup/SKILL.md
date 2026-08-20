@@ -25,6 +25,7 @@ option questions:
 | **Board** | IQ-9075-EVK · IQ-8275-EVK · RB3Gen2 · IQ-X7181-EVK | kas yml, machine name, reference lookup |
 | **BT chip** | QCA2066 · WCN3988 / WCN7850 · QCA6696 / QCA6750 (M.2) | Pattern (B1/B2/C) + binding YAML |
 | **QLI version** | QLI 2.0 (6.18 LTS) · QLI 0.0 (mainline) | meta-qcom branch + kernel recipe |
+| **Build method** | QLI Yocto (meta-qcom + kas) · Other Yocto/BSP · Canonical deb · Prebuilt image | Which Stage-1 path; non-default may skip sync-build |
 | **Starting point** | From scratch (Stage 1) · Build done → flash · Running → kernel-prep · externalsrc done → DTS · hci0 missing → debug | Where to enter the pipeline |
 
 Two more that are only needed for specific stages — ask (as options / a path
@@ -45,6 +46,10 @@ Routing after the answers:
 - "From scratch" → begin at Stage 1.
 - A specific starting point → jump directly to that stage.
 - If a `configs/<board>.yaml` already exists, skip questions it already answers.
+- Build method feeds Stage 1: **QLI Yocto** → `qli-bt-sync-build` as usual;
+  **Canonical deb / Prebuilt** → skip sync-build, go straight to Stage 2 flash
+  (build the deb out-of-band first if needed); **Other Yocto/BSP** →
+  `qli-bt-sync-build` with the repo/build command substituted.
 
 ---
 
