@@ -17,8 +17,14 @@ structured multiple-choice question tool (e.g. AskUserQuestion in Claude Code)
 so the user can click instead of typing. Offer the common choices plus an
 "Other" escape hatch; only fall back to free text if the tool is unavailable.
 
-Ask only what cannot be derived automatically. Present these as a batch of
-option questions:
+**The question tool caps out at 4 questions per call — do not put all 5
+below in one call, they will silently get truncated to 4.** Split into two
+calls: batch 1 (Board, BT chip, QLI version, Build method), then batch 2
+(Starting point alone — its options depend on the build method just answered).
+
+Ask only what cannot be derived automatically.
+
+**Batch 1:**
 
 | Question | Suggested options (add "Other") | Why needed |
 |---|---|---|
@@ -26,7 +32,16 @@ option questions:
 | **BT chip** | QCA2066 · WCN3988 / WCN7850 · QCA6696 / QCA6750 (M.2) | Pattern (B1/B2/C) + binding YAML |
 | **QLI version** | QLI 2.0 (6.18 LTS) · QLI 0.0 (mainline) | meta-qcom branch + kernel recipe |
 | **Build method** | QLI Yocto (meta-qcom + kas) · Other Yocto/BSP · Canonical deb · Prebuilt image | Which Stage-1 path; non-default may skip sync-build |
+
+**Batch 2** (after batch 1 answers, in a separate tool call):
+
+| Question | Suggested options (add "Other") | Why needed |
+|---|---|---|
 | **Starting point** | From scratch (Stage 1) · Build done → flash · Running → kernel-prep · externalsrc done → DTS · hci0 missing → debug | Where to enter the pipeline |
+
+If the build method from batch 1 is Canonical deb / Prebuilt, drop "From
+scratch (Stage 1)" from the batch-2 options — that path skips sync-build, so
+the earliest sensible entry is "Build done → flash".
 
 Two more that are only needed for specific stages — ask (as options / a path
 prompt) **when that stage is reached**, not upfront:
