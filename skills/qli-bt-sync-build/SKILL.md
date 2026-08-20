@@ -15,7 +15,16 @@ This is Step 1 of the BT bringup flow. Complete this before moving to
 
 ## Step 0 — Determine QLI version and board
 
-Ask the user (or read from context):
+**First check whether this platform uses standard meta-qcom.** If the board
+is not standard meta-qcom (e.g. it uses `meta-qcom-3rdparty` or any other
+repo), do not assume repo naming, branch names, or kas yml paths mirror
+meta-qcom — **ask the user for the complete sync command(s) and the complete
+build command(s)**, and save them verbatim to `configs/<board>.yaml` under
+`build.sync_cmd` / `build.build_cmd`. Then skip straight to running those
+commands (Step 1 and Step 5 below don't apply — go to Step 2/3/3b/4/6 only
+insofar as they're still relevant, e.g. tmux wrapping and output verification).
+
+For **standard meta-qcom**, ask the user (or read from context):
 
 | Input | Example |
 |---|---|
@@ -23,7 +32,6 @@ Ask the user (or read from context):
 | Board | IQ-9075-EVK, IQ-8275-EVK, RB3Gen2, IQ-X7181-EVK, IQ10, … |
 | Build server | server2 (sh02), server3 (sh03), server4 (sh04) |
 | Workspace root | e.g. `/local/mnt/workspace/<user>/qclinux/QLI2.0/<BOARD>/` |
-| Repo | default `https://github.com/qualcomm-linux/meta-qcom.git`; check `configs/<board>.yaml` → `build.repo` first — some platforms use a different repo, but branch names and every command below (kas, bitbake, tmux) stay the same |
 
 Server alias mapping:
 
@@ -44,9 +52,8 @@ QLI version → branch / recipe correspondence:
 
 ## Step 1 — Clone meta-qcom on the build server
 
-Use `build.repo` from `configs/<board>.yaml` if set; otherwise default to
-`meta-qcom`. Only the URL changes — branch names and every command in this
-skill are identical either way.
+If `configs/<board>.yaml` has `build.sync_cmd` set, run that verbatim instead
+of this step (it's a non-standard-repo platform — see Step 0).
 
 ```bash
 # Replace <WORKSPACE> with your workspace root, e.g.:
@@ -56,13 +63,11 @@ ssh <BUILD_SERVER>
 mkdir -p <WORKSPACE>
 cd <WORKSPACE>
 
-# Default repo, QLI 2.0
+# QLI 2.0
 git clone https://github.com/qualcomm-linux/meta-qcom.git -b wrynose
 
-# Default repo, QLI 0.0 (mainline)
+# QLI 0.0 (mainline)
 # git clone https://github.com/qualcomm-linux/meta-qcom.git -b master
-
-# If build.repo overrides the default, substitute it here, same -b branch
 ```
 
 ---
@@ -172,6 +177,10 @@ CONFIG_DYNAMIC_FTRACE=y
 ---
 
 ## Step 5 — Run the build in a tmux session
+
+If `configs/<board>.yaml` has `build.build_cmd` set (non-standard-repo
+platform, see Step 0), run that verbatim inside tmux instead of the `kas
+build` line below — do not assume the yml path pattern matches meta-qcom.
 
 **Always use tmux** — SSH disconnect kills the build otherwise.
 

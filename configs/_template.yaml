@@ -9,7 +9,8 @@ board:
   soc: ""                     # e.g. x1e80100 (Hamoa)
 
 build:
-  repo: ""                    # default https://github.com/qualcomm-linux/meta-qcom.git; override if this platform uses a different repo (same branch/build commands apply)
+  sync_cmd: ""                 # ONLY if not standard meta-qcom: full sync command(s) provided by the user, e.g. "git clone git@github.com:qualcomm-linux/meta-qcom-3rdparty.git -b wrynose". Run verbatim, do not assume repo/branch/kas-yml naming matches meta-qcom
+  build_cmd: ""                # ONLY if not standard meta-qcom: full build command(s) provided by the user, e.g. "kas build meta-qcom-3rdparty/ci/<board>.yml:...". Run verbatim
   server: ""                  # e.g. <build-server>
   workspace: ""               # e.g. /local/mnt/workspace/<user>/qclinux/QLI0.0/IQ-X7181-EVK
   qli_version: ""             # QLI 0.0 or QLI 2.0
