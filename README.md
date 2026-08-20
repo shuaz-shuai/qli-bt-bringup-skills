@@ -85,7 +85,7 @@ qli-bt-bringup-skills/
 ├── configs/                # shared: structured per-board config (<board>.yaml)
 │   └── _template.yaml
 └── boards/                 # shared: per-board reference notes (<board>.md)
-    └── iq-x7181-evk.md
+    └── README.md           #   (drop <board>.md files here as boards are done)
 ```
 
 **Completed-platform data is shared, at the top level** — not inside any one
