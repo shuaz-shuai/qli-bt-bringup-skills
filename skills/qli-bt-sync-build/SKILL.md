@@ -85,9 +85,21 @@ python3 -m venv ~/kas-venv && source ~/kas-venv/bin/activate && pip3 install kas
 
 ## Step 3 — Create downloads.yml + symlink local downloads cache
 
-Two mechanisms work together to speed up the build:
+Two mechanisms speed up the build. **Both are determined by checking the
+filesystem — do not ask the user which one to use; this is not a choice,
+it's a fact about the environment.**
 
 **1. downloads.yml** — pulls from internal NFS mirror (for packages not in local cache)
+
+Check first, unconditionally, before deciding anything:
+```bash
+ls /prj/qct/quic/oe_filer_scratch/DOWNLOADS/whinlatter | head -3
+```
+- **Path accessible** → create `downloads.yml` (below) and include it in the
+  `kas build` command in Step 5.
+- **Path not accessible** → skip `downloads.yml` entirely, omit it from the
+  `kas build` command, and just tell the user the first pull will be slower
+  (~30GB) — do not ask them to pick between mirror options.
 
 `meta-qcom` does NOT ship this file. Create it manually:
 
@@ -102,17 +114,14 @@ local_conf_header:
 EOF
 ```
 
-Verify NFS is accessible first:
-```bash
-ls /prj/qct/quic/oe_filer_scratch/DOWNLOADS/whinlatter | head -3
-```
-
-If the NFS path is not mounted, skip `downloads.yml` and omit it from the
-kas build command — the build still works, just slower on first pull (~30GB).
-
 **2. Local downloads cache symlink** — reuses already-downloaded packages across workspaces
 
-If `/local/mnt/workspace/<user>/qclinux/downloads` exists, create a symlink from within the build directory:
+Check first, unconditionally:
+```bash
+ls /local/mnt/workspace/<user>/qclinux/downloads 2>/dev/null && echo EXISTS || echo NONE
+```
+- **Exists** → create the symlink (below).
+- **Doesn't exist** → skip silently, nothing to ask.
 
 ```bash
 mkdir -p <WORKSPACE>/build
