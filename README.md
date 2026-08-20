@@ -57,7 +57,7 @@ directly — BT_EN GPIO, the BT UART's four lines (TX/RX/CTS/RFR), the QUP
 instance, and each pin's default pull:
 
 ```bash
-python3 qli-bt-dts/scripts/parse_sysio.py <board>_SYSIO.xlsx
+python3 skills/qli-bt-dts/scripts/parse_sysio.py <board>_SYSIO.xlsx
 ```
 
 ```
@@ -76,8 +76,8 @@ confirmed from the PMIC section or a reference board.
 Clone into your Claude Code skills directory:
 
 ```bash
-git clone https://github.com/shuaz-shuai/<repo-name>.git
-cp -r <repo-name>/qli-bt-* ~/.claude/skills/
+git clone https://github.com/shuaz-shuai/qli-bt-bringup-skills.git
+cp -r qli-bt-bringup-skills/skills/qli-bt-* ~/.claude/skills/
 ```
 
 Then invoke a stage from the agent, e.g. `/qli-bt-bringup`, or let the router
