@@ -13,9 +13,29 @@ This is Step 1 of the BT bringup flow. Complete this before moving to
 
 ---
 
-## Step 0 — Determine QLI version and board
+## Step 0 — Determine build method, QLI version, and board
 
-Ask the user (or read from context):
+**First, confirm the build method** — not every platform uses meta-qcom + kas.
+Ask this as a selectable option:
+
+| Build method | Repo / tooling | Rest of this skill applies? |
+|---|---|---|
+| **QLI Yocto (default)** | `meta-qcom` + `kas build` | Yes — follow Steps 1–6 as written |
+| **Other Yocto/BSP** | a different `meta-*` layer or manifest + `kas`/`bitbake` | Partly — swap repo URL/branch + kas yml in Steps 1/4/5; downloads, tmux, verify still apply |
+| **Canonical / Ubuntu kernel** | `linux-qcom` deb source, `debian/rules` (no kas) | No — this skill is skipped; build the kernel deb per that platform's flow, then resume at `qli-bt-flash` |
+| **Prebuilt image provided** | image handed over, no local build | No — skip to `qli-bt-flash` directly |
+
+If the method is **not** "QLI Yocto (default)", record it in
+`configs/<board>.yaml` under `build.method` + `build.repo` + `build.build_cmd`
+so later runs don't re-ask, then branch accordingly:
+- **Other Yocto/BSP** → continue below, substituting the repo/branch and the
+  `kas`/`bitbake` invocation for that platform. The mirror (Step 3), BT-tools
+  bbappend (Step 3b), tmux run (Step 5), and verify/kernel-source checks
+  (Step 6) are method-agnostic and still apply.
+- **Canonical / Prebuilt** → stop here; note where the image / kernel deb comes
+  from and proceed to the next stage.
+
+Then collect the standard context (ask/read from context):
 
 | Input | Example |
 |---|---|
