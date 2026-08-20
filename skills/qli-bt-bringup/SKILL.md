@@ -12,14 +12,28 @@ collects your context and routes you to the right sub-skill at each stage.
 
 ## Step 0 — Collect minimum context
 
-Ask only what cannot be derived automatically:
+**Ask with selectable options, not an open-ended list.** Use the host's
+structured multiple-choice question tool (e.g. AskUserQuestion in Claude Code)
+so the user can click instead of typing. Offer the common choices plus an
+"Other" escape hatch; only fall back to free text if the tool is unavailable.
 
-| Question | Why needed |
-|---|---|
-| Board | Determines kas yml, machine name, reference board lookup |
-| BT chip | Determines Pattern (B1/B2/C) and binding YAML |
-| QLI version | Determines meta-qcom branch and kernel recipe |
-| Build server | Needed for SSH access |
+Ask only what cannot be derived automatically. Present these as a batch of
+option questions:
+
+| Question | Suggested options (add "Other") | Why needed |
+|---|---|---|
+| **Board** | IQ-9075-EVK · IQ-8275-EVK · RB3Gen2 · IQ-X7181-EVK | kas yml, machine name, reference lookup |
+| **BT chip** | QCA2066 · WCN3988 / WCN7850 · QCA6696 / QCA6750 (M.2) | Pattern (B1/B2/C) + binding YAML |
+| **QLI version** | QLI 2.0 (6.18 LTS) · QLI 0.0 (mainline) | meta-qcom branch + kernel recipe |
+| **Starting point** | From scratch (Stage 1) · Build done → flash · Running → kernel-prep · externalsrc done → DTS · hci0 missing → debug | Where to enter the pipeline |
+
+Two more that are only needed for specific stages — ask (as options / a path
+prompt) **when that stage is reached**, not upfront:
+
+| Question | When | Options |
+|---|---|---|
+| **Build server** | before Stage 1–4 (SSH) | server2 · server3 · server4 · Other (hostname/IP) |
+| **SYSIO Excel or schematic path** | before Stage 4 (DTS) | provide SYSIO `.xlsx` path (preferred) · schematic PDF path · neither yet |
 
 Everything else (UART instance, GPIO, clock, Windows drive letter, PCAT SN)
 is resolved automatically from (shared board data at the repo top level):
@@ -27,8 +41,10 @@ is resolved automatically from (shared board data at the repo top level):
 2. `boards/<board>.md` — reference board for same chip
 3. SYSIO Excel / schematic — only if not found in 1 or 2
 
-If the user says "starting from scratch" → begin at Stage 1.
-If the user names a specific stage → jump directly there.
+Routing after the answers:
+- "From scratch" → begin at Stage 1.
+- A specific starting point → jump directly to that stage.
+- If a `configs/<board>.yaml` already exists, skip questions it already answers.
 
 ---
 
