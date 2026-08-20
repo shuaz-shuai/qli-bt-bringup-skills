@@ -22,10 +22,10 @@ Ask only what cannot be derived automatically:
 | Build server | Needed for SSH access |
 
 Everything else (UART instance, GPIO, clock, Windows drive letter, PCAT SN)
-is resolved automatically from:
+is resolved automatically from (shared board data at the repo top level):
 1. `configs/<board>.yaml` — if board has been done before
-2. `references/boards/<board>.md` — reference board for same chip
-3. Schematic — only if not found in 1 or 2
+2. `boards/<board>.md` — reference board for same chip
+3. SYSIO Excel / schematic — only if not found in 1 or 2
 
 If the user says "starting from scratch" → begin at Stage 1.
 If the user names a specific stage → jump directly there.
@@ -218,5 +218,6 @@ in the kernel's `hci_qca.c` `qca_bluetooth_of_match[]` table:
 grep -n "compatible\|qca_bluetooth_of_match" kernel-source/drivers/bluetooth/hci_qca.c | head -40
 ```
 
-If the chip is not listed → stop and invoke `qli-bt-driver-enablement` (separate
-skill) before continuing with DTS work.
+If the chip is not listed → stop and add driver support first (add the
+`.compatible` entry to `qca_bluetooth_of_match[]` in `hci_qca.c`, plus any
+chip-specific setup) before continuing with DTS work.

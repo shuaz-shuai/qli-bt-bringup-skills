@@ -13,6 +13,11 @@ This is Step 3 of the BT bringup flow, after `qli-bt-kernel-prep`.
 
 ## Config-driven workflow
 
+Board-specific data is shared across all skills in this repo and lives at the
+**repo top level**, not inside this skill:
+- `configs/<board>.yaml` — structured values (machine, chip, GPIO, UART, …)
+- `boards/<board>.md` — reference notes (actual DTS changes, pitfalls)
+
 Before asking the user anything, check these two sources in order:
 
 **1. Check `configs/<board>.yaml`**
@@ -21,11 +26,11 @@ If a config file exists for this board, use all values from it directly —
 do NOT ask the user for information that's already there.
 
 ```bash
-ls references/boards/        # check available reference boards
-ls configs/                  # check if board config already exists
+ls boards/          # repo top level — reference notes for done boards
+ls configs/         # repo top level — structured board configs
 ```
 
-**2. Check `references/boards/<board>.md`**
+**2. Check `boards/<board>.md`**
 
 If a reference board entry exists (same chip, previously bringup'd),
 read it first to understand the DTS structure and reusable values.

@@ -205,7 +205,7 @@ dmesg | grep -i "request.*file\|firmware.*qca"   # 确认 driver 请求的确切
 ```
 
 文件名必须完全匹配（大小写）。文件存在但报错 → driver 里 `soc_type` 写错，
-见 `qli-bt-driver-enablement` skill。
+需检查 `hci_qca.c` 里该 chip 的 driver 定义。
 
 ---
 

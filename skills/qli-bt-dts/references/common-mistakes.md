@@ -155,4 +155,4 @@ table doesn't exist for your chip, the wrong filename is constructed.
 | QCA6698 (Hamilton Auto) | crbtfw21.tlv | hpnv21g.bin |
 
 If FW files exist but aren't found, the `soc_type` in the driver table is
-wrong — see `qli-bt-driver-enablement` skill for adding/fixing driver entries.
+wrong — check the chip's entry in `hci_qca.c` to add/fix driver support.

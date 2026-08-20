@@ -71,6 +71,37 @@ confirmed from the PMIC section or a reference board.
 
 ---
 
+## Repository layout
+
+```
+qli-bt-bringup-skills/
+├── skills/                 # installable Agent Skills (one dir each)
+│   ├── qli-bt-bringup/     #   router
+│   ├── qli-bt-sync-build/
+│   ├── qli-bt-flash/
+│   ├── qli-bt-kernel-prep/
+│   ├── qli-bt-dts/         #   includes scripts/parse_sysio.py
+│   └── qli-bt-debug/
+├── configs/                # shared: structured per-board config (<board>.yaml)
+│   └── _template.yaml
+└── boards/                 # shared: per-board reference notes (<board>.md)
+    └── iq-x7181-evk.md
+```
+
+**Completed-platform data is shared, at the top level** — not inside any one
+skill — because a board's values are used across every stage (flash needs the
+Windows drive, dts needs the GPIO/UART, debug needs the pattern):
+
+- `configs/<board>.yaml` — machine-readable values. When present, the skills
+  read it directly and **skip asking you**. Copy `_template.yaml` to start.
+- `boards/<board>.md` — human/agent notes: the actual DTS changes that worked,
+  pitfalls, flash quirks. Read first when bringing up a **new board with the
+  same chip** to reuse the structure.
+
+After finishing a board, save both files here so the next bring-up reuses them.
+
+---
+
 ## Installation
 
 Clone into your Claude Code skills directory:
@@ -80,9 +111,8 @@ git clone https://github.com/shuaz-shuai/qli-bt-bringup-skills.git
 cp -r qli-bt-bringup-skills/skills/qli-bt-* ~/.claude/skills/
 ```
 
-Then invoke a stage from the agent, e.g. `/qli-bt-bringup`, or let the router
-pick the stage from your description ("board boots but hci0 doesn't appear" →
-debug).
+The skills read `configs/` and `boards/` relative to the repo root, so keep the
+clone around (or copy those two dirs alongside wherever you run from).
 
 ### Dependencies
 
