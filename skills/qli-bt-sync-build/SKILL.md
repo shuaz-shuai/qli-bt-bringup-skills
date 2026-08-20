@@ -23,6 +23,7 @@ Ask the user (or read from context):
 | Board | IQ-9075-EVK, IQ-8275-EVK, RB3Gen2, IQ-X7181-EVK, IQ10, … |
 | Build server | server2 (sh02), server3 (sh03), server4 (sh04) |
 | Workspace root | e.g. `/local/mnt/workspace/<user>/qclinux/QLI2.0/<BOARD>/` |
+| Repo | default `https://github.com/qualcomm-linux/meta-qcom.git`; check `configs/<board>.yaml` → `build.repo` first — some platforms use a different repo, but branch names and every command below (kas, bitbake, tmux) stay the same |
 
 Server alias mapping:
 
@@ -43,6 +44,10 @@ QLI version → branch / recipe correspondence:
 
 ## Step 1 — Clone meta-qcom on the build server
 
+Use `build.repo` from `configs/<board>.yaml` if set; otherwise default to
+`meta-qcom`. Only the URL changes — branch names and every command in this
+skill are identical either way.
+
 ```bash
 # Replace <WORKSPACE> with your workspace root, e.g.:
 # /local/mnt/workspace/<user>/qclinux/QLI2.0/<BOARD>
@@ -51,11 +56,13 @@ ssh <BUILD_SERVER>
 mkdir -p <WORKSPACE>
 cd <WORKSPACE>
 
-# QLI 2.0
+# Default repo, QLI 2.0
 git clone https://github.com/qualcomm-linux/meta-qcom.git -b wrynose
 
-# QLI 0.0 (mainline)
+# Default repo, QLI 0.0 (mainline)
 # git clone https://github.com/qualcomm-linux/meta-qcom.git -b master
+
+# If build.repo overrides the default, substitute it here, same -b branch
 ```
 
 ---

@@ -17,8 +17,11 @@ structured multiple-choice question tool (e.g. AskUserQuestion in Claude Code)
 so the user can click instead of typing. Offer the common choices plus an
 "Other" escape hatch; only fall back to free text if the tool is unavailable.
 
-**The question tool caps out at 4 questions per call.** These 4 fit in one
-call:
+Ask all of the following **upfront, before routing to any stage**. The
+question tool caps out at 4 questions per call, so split into two calls made
+back-to-back (not deferred to later stages):
+
+**Call 1:**
 
 | Question | Suggested options (add "Other") | Why needed |
 |---|---|---|
@@ -27,13 +30,12 @@ call:
 | **QLI version** | QLI 2.0 (6.18 LTS) · QLI 0.0 (mainline) | meta-qcom branch + kernel recipe |
 | **Starting point** | From scratch (Stage 1) · Build done → flash · Running → kernel-prep · externalsrc done → DTS · hci0 missing → debug | Where to enter the pipeline |
 
-Two more that are only needed for specific stages — ask (as options / a path
-prompt) **when that stage is reached**, not upfront:
+**Call 2** (immediately after, same turn):
 
-| Question | When | Options |
+| Question | Suggested options (add "Other") | Why needed |
 |---|---|---|
-| **Build server** | before Stage 1–4 (SSH) | server2 · server3 · server4 · Other (hostname/IP) |
-| **SYSIO Excel or schematic path** | before Stage 4 (DTS) | provide SYSIO `.xlsx` path (preferred) · schematic PDF path · neither yet |
+| **Build server** | server2 · server3 · server4 · Other (hostname/IP) | SSH access for Stage 1–4 |
+| **SYSIO Excel or schematic path** | provide SYSIO `.xlsx` path (preferred) · schematic PDF path · neither yet | Needed at Stage 4 (DTS); collect now to avoid asking again later |
 
 Everything else (UART instance, GPIO, clock, Windows drive letter, PCAT SN)
 is resolved automatically from (shared board data at the repo top level):
